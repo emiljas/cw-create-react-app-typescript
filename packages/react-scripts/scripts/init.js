@@ -39,10 +39,14 @@ module.exports = function(
 
   // Setup the script rules
   appPackage.scripts = {
-    start: 'react-scripts-ts start',
-    build: 'react-scripts-ts build',
-    test: 'react-scripts-ts test --env=jsdom',
-    eject: 'react-scripts-ts eject',
+    'start:js': 'cw-react-scripts-ts start',
+    start: 'npm-run-all -p watch:css start:js',
+    build: 'npm run build:css && cw-react-scripts-ts build',
+    test: 'karma start karma.conf.js',
+    'build:css':
+      'node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/',
+    'watch:css':
+      'npm run build:css && node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/ --watch --recursive',
   };
 
   fs.writeFileSync(
@@ -104,16 +108,43 @@ module.exports = function(
 
   // Install dev dependencies
   const types = [
+    '@types/chai-as-promised',
+    '@types/chai',
+    '@types/karma-chai-sinon',
+    '@types/mocha',
     '@types/node',
-    '@types/react',
     '@types/react-dom',
-    '@types/jest',
+    '@types/react-redux',
+    '@types/react',
+    '@types/sinon',
+    'chai-as-promised',
+    'chai',
+    'karma-chai-as-promised',
+    'karma-chai-sinon',
+    'karma-chai',
+    'karma-chrome-launcher',
+    'karma-coverage',
+    'karma-html-reporter',
+    'karma-mocha-reporter',
+    'karma-mocha',
+    'karma-sinon',
+    'karma-typescript-preprocessor',
+    'karma-typescript',
+    'karma',
+    'mocha',
+    'npm-run-all',
+    'sinon',
+    'typescript',
   ];
 
-  console.log(`Installing ${types.join(', ')} as dev dependencies ${command}...`);
+  console.log(
+    `Installing ${types.join(', ')} as dev dependencies ${command}...`
+  );
   console.log();
 
-  const devProc = spawn.sync(command, args.concat('-D').concat(types), { stdio: 'inherit' });
+  const devProc = spawn.sync(command, args.concat('-D').concat(types), {
+    stdio: 'inherit',
+  });
   if (devProc.status !== 0) {
     console.error(`\`${command} ${args.concat(types).join(' ')}\` failed`);
     return;
@@ -131,23 +162,27 @@ module.exports = function(
         return `${key}@${templateDependencies[key]}`;
       })
     );
+    console.log(
+      11111111111111,
+      templateDependenciesPath,
+      templateDependencies,
+      args
+    );
     fs.unlinkSync(templateDependenciesPath);
   }
 
   // Install react and react-dom for backward compatibility with old CRA cli
   // which doesn't install react and react-dom along with react-scripts
   // or template is presetend (via --internal-testing-template)
-  if (!isReactInstalled(appPackage) || template) {
-    console.log(`Installing react and react-dom using ${command}...`);
-    console.log();
+  console.log(`Installing additional dependencies ${command}...`);
+  console.log();
 
-    const proc = spawn.sync(command, args.concat(['react', 'react-dom']), {
-      stdio: 'inherit',
-    });
-    if (proc.status !== 0) {
-      console.error(`\`${command} ${args.join(' ')}\` failed`);
-      return;
-    }
+  const proc = spawn.sync(command, args.concat(['react', 'react-dom']), {
+    stdio: 'inherit',
+  });
+  if (proc.status !== 0) {
+    console.error(`\`${command} ${args.join(' ')}\` failed`);
+    return;
   }
 
   // Display the most elegant way to cd.
@@ -203,12 +238,3 @@ module.exports = function(
   console.log();
   console.log('Happy hacking!');
 };
-
-function isReactInstalled(appPackage) {
-  const dependencies = appPackage.dependencies || {};
-
-  return (
-    typeof dependencies.react !== 'undefined' &&
-    typeof dependencies['react-dom'] !== 'undefined'
-  );
-}
