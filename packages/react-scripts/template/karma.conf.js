@@ -15,7 +15,9 @@ module.exports = function(config) {
       { pattern: 'tests/**/*ts' },
       'node_modules/chai/chai.js',
       'node_modules/react/umd/react.development.js',
+      'node_modules/redux/dist/redux.js',
       'node_modules/react-redux/dist/react-redux.js',
+      'node_modules/lodash/lodash.js',
     ],
 
     preprocessors: {
