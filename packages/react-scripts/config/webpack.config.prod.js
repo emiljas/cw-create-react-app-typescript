@@ -171,7 +171,7 @@ module.exports = {
           {
             test: /\.(ts|tsx)$/,
             include: paths.appSrc,
-            loader: require.resolve('ts-loader')
+            loader: require.resolve('ts-loader'),
           },
           // The notation here is somewhat confusing.
           // "postcss" loader applies autoprefixer to our CSS.
@@ -222,7 +222,7 @@ module.exports = {
                     },
                   ],
                 },
-                extractTextPluginOptions
+                extractTextPluginOptions // TODO: https://github.com/webpack-contrib/sass-loader#in-production
               )
             ),
             // Note: this won't work without `new ExtractTextPlugin()` in `plugins`.

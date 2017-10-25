@@ -39,14 +39,9 @@ module.exports = function(
 
   // Setup the script rules
   appPackage.scripts = {
-    'start:js': 'cw-react-scripts-ts start',
-    start: 'npm-run-all -p watch:css start:js',
-    build: 'npm run build:css && cw-react-scripts-ts build',
+    start: 'cw-react-scripts-ts start',
+    build: 'cw-react-scripts-ts build',
     test: 'karma start karma.conf.js',
-    'build:css':
-      'node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/',
-    'watch:css':
-      'npm run build:css && node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/ --watch --recursive',
   };
 
   fs.writeFileSync(
@@ -133,6 +128,7 @@ module.exports = function(
     'karma',
     'mocha',
     'npm-run-all',
+    'sass-loader',
     'sinon',
     'typescript',
   ];
@@ -161,12 +157,6 @@ module.exports = function(
       Object.keys(templateDependencies).map(key => {
         return `${key}@${templateDependencies[key]}`;
       })
-    );
-    console.log(
-      11111111111111,
-      templateDependenciesPath,
-      templateDependencies,
-      args
     );
     fs.unlinkSync(templateDependenciesPath);
   }

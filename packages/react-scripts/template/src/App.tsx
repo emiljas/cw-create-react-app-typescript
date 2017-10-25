@@ -1,5 +1,5 @@
 import * as React from "react";
-import "./App.css";
+import "./App.sass";
 import Test from "./testCssModulesComponent/Test";
 import { Provider } from "react-redux";
 import { createStore } from "redux";

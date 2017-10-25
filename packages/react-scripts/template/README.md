@@ -1,3 +1,9 @@
+# local development
+
+create-react-app my-app --scripts-version [path]\react-scripts\cw-react-scripts-ts-2.8.0.tgz
+cd my-app
+npm start
+
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 Below you will find some information on how to perform common tasks.<br>
